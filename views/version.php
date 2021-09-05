@@ -1,0 +1,3 @@
+<div class="float-right d-none d-sm-inline-block">
+    <b><?php echo $version; ?></b> 1.0
+</div>
