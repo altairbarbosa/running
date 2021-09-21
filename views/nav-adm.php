@@ -36,13 +36,13 @@ try {
                 <i class="fas fa-globe"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right p-0">
-                <a href="?lang=en" class="dropdown-item">
+                <a class="dropdown-item" href="?lang=en">
                     <i class="flag-icon flag-icon-us mr-2"></i> <?php echo $english; ?>
                 </a>
-                <a href="?lang=es" class="dropdown-item">
+                <a class="dropdown-item" href="?lang=es">
                     <i class="flag-icon flag-icon-es mr-2"></i> <?php echo $spanish; ?>
                 </a>
-                <a href="?lang=pt" class="dropdown-item">
+                <a class="dropdown-item" href="?lang=pt">
                     <i class="flag-icon flag-icon-br mr-2"></i> <?php echo $portuguese; ?>
                 </a>
             </div>
@@ -52,12 +52,13 @@ try {
                 <i class="fas fa-user"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right p-0">
-                <a class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">
-                    <i class="fas fa-user"></i>
+                <a class="dropdown-item" href="adm-user-edit.php<?php echo '?id_user=' . $_SESSION['id'] ?>">
+                    <i class="fas fa-user mr-2"></i>
                     <?php echo $_SESSION['nome']; ?>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="?exit">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
                     <?php echo $exit ?>
                 </a>
             </div>

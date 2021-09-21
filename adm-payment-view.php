@@ -2,8 +2,7 @@
 require_once('crud/session-adm.php');
 require_once('lang/translator.php');
 require_once('crud/connection.php');
-require_once('models/UserClass.php');
-require_once('models/PurchaseClass.php');
+require_once('models/DebtClass.php');
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +42,7 @@ include('views/head.php');
                     <div class="row">
                         <div class="col-md-12">
                             <?php
-                                include('forms/form-adm-payment.php')
+                            include('forms/form-adm-payment-view.php')
                             ?>
                         </div>
                     </div>
@@ -60,6 +59,24 @@ include('views/head.php');
     <?php
     include('views/script.php');
     ?>
+
+    <script>
+        $(function() {
+            $("#table1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+            $('#table2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
 </body>
 
 </html>

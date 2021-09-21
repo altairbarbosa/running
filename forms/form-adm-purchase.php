@@ -29,6 +29,7 @@ foreach ($count as $row) {
         <table id="table1" class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th><?php echo $identifier; ?></th>
                     <th><?php echo $name; ?></th>
                     <th><?php echo $action; ?></th>
                 </tr>
@@ -38,6 +39,7 @@ foreach ($count as $row) {
                 for ($i = 0; $i < count($usuarios); $i++) {
                 ?>
                     <tr>
+                        <td><?php echo $usuarios[$i]->getId(); ?></td>
                         <td><?php echo $usuarios[$i]->getNome(); ?></td>
                         <td>
                             <div class="row">
@@ -45,7 +47,7 @@ foreach ($count as $row) {
                                     <a href="adm-purchase-view.php<?php echo '?id_user=' . $usuarios[$i]->getId(); ?>"><i class="fas fa fa-eye"></i></a> <?php echo $view; ?>
                                 </div>
                                 <div class="col-sm">
-                                    <a href="adm-purchase-add.php<?php echo '?id_user=' . $usuarios[$i]->getId(); ?>"><i class="fas fa fa-plus-square"></i></a> <?php echo $create; ?>
+                                    <a href="adm-purchase-add.php<?php echo '?id_user=' . $usuarios[$i]->getId(); ?>"><i class="fas fa fa-plus-square"></i></a> <?php echo $add; ?>
                                 </div>
                             </div>
                         </td>

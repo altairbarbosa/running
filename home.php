@@ -51,7 +51,7 @@ include('views/head.php');
                                         <?php echo $count_treino[0]; ?>
                                     </h3>
                                     <p>
-                                        <?php echo $registered_training; ?>
+                                        <?php echo $training; ?>
                                     </p>
                                 </div>
                                 <div class="icon">
