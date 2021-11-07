@@ -66,7 +66,7 @@ include('views/head.php');
                                 <div class="icon">
                                     <i class="fas fa-user"></i>
                                 </div>
-                                <a href="adm-user-view.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="adm-user.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
@@ -82,7 +82,7 @@ include('views/head.php');
                                 <div class="icon">
                                     <i class="fas fa-stream"></i>
                                 </div>
-                                <a href="adm-product-view.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="adm-product.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
@@ -99,7 +99,7 @@ include('views/head.php');
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="adm-service-view.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="adm-service.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
@@ -116,7 +116,7 @@ include('views/head.php');
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                                <a href="adm-exercise-view.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="adm-exercise.php" class="small-box-footer"><?php echo $view; ?> <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
