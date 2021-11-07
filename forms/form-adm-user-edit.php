@@ -17,27 +17,27 @@ $cliente = $select->fetchAll();
                 <input hidden type="text" class="form-control" value="<?php echo $row['id']; ?>" id="id_user" name="id_user">
                 <div class="form-group">
                     <label for="name_Client"><?php echo $name; ?></label>
-                    <input type="text" class="form-control" value="<?php echo $row['nome']; ?>" id="name_Client" name="name_client">
+                    <input type="text" class="form-control" value="<?php echo $row['nome']; ?>" id="name_client" name="name_client">
                 </div>
                 <div class="form-group">
                     <label for="address_Client"><?php echo $address; ?></label>
-                    <input type="text" class="form-control" value="<?php echo $row['endereco']; ?>" id="address_Client" name="address_Client">
+                    <input type="text" class="form-control" value="<?php echo $row['endereco']; ?>" id="address_client" name="address_client">
                 </div>
                 <div class="form-group">
                     <label for="email_Client"><?php echo $email; ?></label>
-                    <input type="text" class="form-control" value="<?php echo $row['email']; ?>" id="email_Client" name="email_Client">
+                    <input type="text" class="form-control" value="<?php echo $row['email']; ?>" id="email_client" name="email_client">
                 </div>
                 <div class="form-group">
                     <label for="phone_Client"><?php echo $phone; ?></label>
-                    <input type="text" class="form-control" value="<?php echo $row['telefone']; ?>" id="phone_Client" name="phone_Client">
+                    <input type="text" class="form-control" value="<?php echo $row['telefone']; ?>" id="phone_client" name="phone_client">
                 </div>
                 <div class="form-group">
                     <label for="age_Client"><?php echo $age; ?></label>
-                    <input type="text" class="form-control" value="<?php echo $row['idade']; ?>" id="age_Client" name="age_Client">
+                    <input type="text" class="form-control" value="<?php echo $row['idade']; ?>" id="age_client" name="age_client">
                 </div>
                 <div class="form-group">
                     <label><?php echo $level; ?></label>
-                    <select class="form-control" style="width: 100%;" name="id_exercise">
+                    <select class="form-control" style="width: 100%;" name="id_nivel">
                         <option value="<?php echo $row['nivel']; ?>">
                             <?php
                             if ($row['nivel'] == 1) {
