@@ -4,7 +4,7 @@
             document.write(new Date().getFullYear());
         </script>
         <strong>
-            <a href="https://oquesereu.tumblr.com"> Oquesereu</a>
+            <a href="https://oquesereu.tumblr.com"> oquesereu</a>
         </strong> -
         <?php echo $allRightsReserved; ?>
     </span>
