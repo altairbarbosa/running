@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-brand-50: #f0fdf9;
+    --color-brand-100: #ccfbef;
+    --color-brand-500: #14b890;
+    --color-brand-600: #079473;
+    --color-brand-700: #08765e;
+    --color-ink-950: #101a1e;
+}
+
+@layer base {
+    body { @apply bg-slate-50 text-slate-800 antialiased; }
+    [x-cloak] { display: none !important; }
+    input, select, textarea { @apply outline-none; }
+}
+
+@layer components {
+    .btn-primary { @apply inline-flex items-center justify-center rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:ring-4 focus:ring-brand-100; }
+    .btn-secondary { @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50; }
+    .field { @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
+    .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
+    .card { @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm; }
+}
