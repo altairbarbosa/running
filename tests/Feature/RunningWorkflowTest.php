@@ -199,6 +199,29 @@ class RunningWorkflowTest extends TestCase
         $this->assertSame(1,$product->fresh()->stock);
     }
 
+    public function test_staff_can_create_a_product_with_an_image_larger_than_two_megabytes(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+        $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=');
+        $image = UploadedFile::fake()->createWithContent('camiseta.png', $png.str_repeat("\0", 2500 * 1024));
+
+        $this->actingAs($admin)->get(route('shop.index'))
+            ->assertOk()
+            ->assertSee('até 3 MB');
+
+        $this->post(route('shop.products.store'), [
+            'name' => 'Camiseta com foto',
+            'price' => 59.90,
+            'stock' => 10,
+            'active' => '1',
+            'image' => $image,
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $product = Product::where('name', 'Camiseta com foto')->firstOrFail();
+        Storage::disk('public')->assertExists($product->image_path);
+    }
+
     public function test_member_cannot_access_staff_area_or_another_members_workout(): void
     {
         $member = User::factory()->create(['role' => 'member']);
