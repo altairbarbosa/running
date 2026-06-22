@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Workout extends Model
 {
-    protected $fillable = ['member_id', 'created_by', 'name', 'starts_at', 'ends_at', 'status', 'notes'];
+    protected $fillable = ['member_id', 'created_by', 'workout_template_id', 'source_workout_id', 'name', 'starts_at', 'ends_at', 'status', 'notes'];
 
     protected function casts(): array
     {
@@ -27,4 +27,7 @@ class Workout extends Model
     {
         return $this->hasMany(WorkoutItem::class)->orderBy('position');
     }
+
+    public function template(){return $this->belongsTo(WorkoutTemplate::class,'workout_template_id');}
+    public function sourceWorkout(){return $this->belongsTo(Workout::class,'source_workout_id');}
 }

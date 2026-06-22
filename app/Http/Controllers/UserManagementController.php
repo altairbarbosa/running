@@ -20,12 +20,14 @@ class UserManagementController extends Controller
             ->when($request->filled('role'), fn ($query) => $query->where('role', $request->string('role')))
             ->orderBy('name')->paginate(15)->withQueryString();
 
-        return view('users.index', compact('users'));
+        $modalUser = $request->integer('user') ? User::find($request->integer('user')) : null;
+
+        return view('users.index', compact('users', 'modalUser'));
     }
 
     public function create()
     {
-        return view('users.form', ['managedUser' => new User]);
+        return redirect()->route('users.index', ['modal' => 'create']);
     }
 
     public function store(Request $request, AvatarService $avatars)
@@ -39,7 +41,7 @@ class UserManagementController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.form', ['managedUser' => $user]);
+        return redirect()->route('users.index', ['modal' => 'edit', 'user' => $user->id]);
     }
 
     public function update(Request $request, User $user, AvatarService $avatars)

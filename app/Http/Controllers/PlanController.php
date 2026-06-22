@@ -8,14 +8,17 @@ use Illuminate\Validation\Rule;
 
 class PlanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('plans.index', ['plans' => Plan::withCount(['memberships' => fn ($query) => $query->where('status', 'active')])->orderBy('name')->get()]);
+        return view('plans.index', [
+            'plans' => Plan::withCount(['memberships' => fn ($query) => $query->where('status', 'active')])->orderBy('name')->get(),
+            'modalPlan' => $request->integer('plan') ? Plan::find($request->integer('plan')) : null,
+        ]);
     }
 
     public function create()
     {
-        return view('plans.form', ['plan' => new Plan]);
+        return redirect()->route('plans.index', ['modal' => 'create']);
     }
 
     public function store(Request $request)
@@ -27,7 +30,7 @@ class PlanController extends Controller
 
     public function edit(Plan $plan)
     {
-        return view('plans.form', compact('plan'));
+        return redirect()->route('plans.index', ['modal' => 'edit', 'plan' => $plan->id]);
     }
 
     public function update(Request $request, Plan $plan)

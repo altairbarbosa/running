@@ -1,6 +1,0 @@
-<x-layouts.app :title="$exercise->exists ? 'Editar exercício' : 'Novo exercício'">
-    <form method="POST" action="{{ $exercise->exists ? route('exercises.update', $exercise) : route('exercises.store') }}" class="card mx-auto max-w-2xl p-6 lg:p-8">@csrf @if($exercise->exists)@method('PUT')@endif
-        <div class="space-y-5"><div><label class="label">Nome</label><input class="field" name="name" value="{{ old('name', $exercise->name) }}" required></div><div><label class="label">Grupo muscular</label><input class="field" name="muscle_group" value="{{ old('muscle_group', $exercise->muscle_group) }}" placeholder="Ex.: Peitoral"></div><div><label class="label">Instruções</label><textarea class="field" name="instructions" rows="5">{{ old('instructions', $exercise->instructions) }}</textarea></div><div><label class="label">Status</label><select class="field" name="active"><option value="1" @selected(old('active', $exercise->active ?? true))>Ativo</option><option value="0" @selected(!old('active', $exercise->active ?? true))>Inativo</option></select></div></div>
-        <div class="mt-8 flex justify-end gap-3"><a class="btn-secondary" href="{{ route('exercises.index') }}">Cancelar</a><button class="btn-primary">Salvar exercício</button></div>
-    </form>
-</x-layouts.app>

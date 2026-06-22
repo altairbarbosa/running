@@ -10,7 +10,7 @@ class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $members = User::query()
+        $members = User::query()->with(['workouts.items'])
             ->where('role', 'member')
             ->when($request->string('search')->isNotEmpty(), function ($query) use ($request) {
                 $search = '%'.$request->string('search')->trim().'%';
@@ -20,12 +20,14 @@ class MemberController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return view('members.index', compact('members'));
+        $modalMember = $request->integer('member') ? User::with(['workouts.items'])->where('role', 'member')->find($request->integer('member')) : null;
+
+        return view('members.index', compact('members', 'modalMember'));
     }
 
     public function create()
     {
-        return view('members.form', ['member' => new User]);
+        return redirect()->route('members.index', ['modal' => 'create']);
     }
 
     public function store(Request $request)
@@ -42,7 +44,7 @@ class MemberController extends Controller
     {
         abort_unless($member->role === 'member', 404);
 
-        return view('members.form', compact('member'));
+        return redirect()->route('members.index', ['modal' => 'edit', 'member' => $member->id]);
     }
 
     public function update(Request $request, User $member)

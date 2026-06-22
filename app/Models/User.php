@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(Membership::class, 'member_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'member_id');
+    }
+
     public function isStaff(): bool
     {
         return in_array($this->role, ['admin', 'trainer'], true);

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Exercise;
+use App\Models\MuscleGroup;
 use App\Models\User;
 use App\Models\Workout;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -32,11 +33,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $exercises = collect([
-            ['name' => 'Supino reto', 'muscle_group' => 'Peitoral'],
-            ['name' => 'Remada baixa', 'muscle_group' => 'Costas'],
-            ['name' => 'Agachamento livre', 'muscle_group' => 'Pernas'],
-            ['name' => 'Desenvolvimento com halteres', 'muscle_group' => 'Ombros'],
-        ])->map(fn ($exercise) => Exercise::create($exercise));
+            ['name' => 'Supino reto', 'group' => 'Peitoral'],
+            ['name' => 'Remada baixa', 'group' => 'Costas'],
+            ['name' => 'Agachamento livre', 'group' => 'Quadríceps'],
+            ['name' => 'Desenvolvimento com halteres', 'group' => 'Ombros'],
+        ])->map(fn ($exercise) => Exercise::create([
+            'name' => $exercise['name'],
+            'muscle_group_id' => MuscleGroup::where('name', $exercise['group'])->value('id'),
+        ]));
 
         $workout = Workout::create([
             'member_id' => $member->id,
