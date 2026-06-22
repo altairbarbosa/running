@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Entrar · Running</title>@vite(['resources/css/app.css', 'resources/js/app.js'])</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#101a1e"><link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml"><title>Entrar · Running</title>@vite(['resources/css/app.css', 'resources/js/app.js'])</head>
 <body class="min-h-screen bg-ink-950">
 <main class="grid min-h-screen lg:grid-cols-2">
     <section class="hidden flex-col justify-between bg-[radial-gradient(circle_at_top_left,_#08765e,_#101a1e_58%)] p-14 text-white lg:flex">
-        <div class="flex items-center gap-3"><div class="grid size-11 place-items-center rounded-xl bg-brand-500 font-black text-ink-950">R</div><span class="font-black tracking-wider">RUNNING</span></div>
+        <x-logo />
         <div class="max-w-xl"><p class="mb-4 text-sm font-bold uppercase tracking-[.25em] text-brand-500">Gestão inteligente</p><h1 class="text-5xl font-black leading-tight">Treinos bem cuidados.<br>Academia bem gerida.</h1><p class="mt-6 text-lg leading-relaxed text-slate-300">A nova geração do primeiro sistema Running, agora segura, simples e pronta para crescer.</p></div>
         <p class="text-sm text-slate-500">Laravel · Blade · Alpine.js</p>
     </section>
     <section class="flex items-center justify-center bg-slate-50 p-6"><div class="w-full max-w-md">
-        <div class="mb-9 lg:hidden"><span class="text-xl font-black text-ink-950">RUNNING</span></div>
+        <div class="mb-9 lg:hidden"><x-logo dark /></div>
         <p class="text-sm font-bold text-brand-600">BEM-VINDO DE VOLTA</p><h2 class="mt-2 text-3xl font-black text-ink-950">Acesse sua conta</h2><p class="mt-2 text-slate-500">Use suas credenciais para continuar.</p>
         <form method="POST" action="{{ route('login.store') }}" class="mt-8 space-y-5">@csrf
             <div><label class="label" for="email">E-mail</label><input class="field" id="email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email">@error('email')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror</div>

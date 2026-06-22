@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exercise;
 use App\Models\User;
 use App\Models\Workout;
+use App\Models\WorkoutTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -16,16 +17,21 @@ class WorkoutController extends Controller
         $user = $request->user();
         $workouts = Workout::with(['member', 'items'])
             ->when(! $user->isStaff(), fn ($query) => $query->where('member_id', $user->id))
+            ->when($user->isStaff() && $request->integer('member_id'), fn ($query) => $query->where('member_id', $request->integer('member_id')))
             ->latest('starts_at')->paginate(12);
 
-        return view('workouts.index', compact('workouts'));
+        $members = $user->isStaff() ? User::where('role', 'member')->where('active', true)->orderBy('name')->get() : collect();
+        $templates = $user->isStaff() ? WorkoutTemplate::with(['items.exercise', 'author'])->where('active', true)->orderBy('name')->get() : collect();
+        return view('workouts.index', compact('workouts', 'members', 'templates'));
     }
 
     public function create()
     {
         return view('workouts.create', [
             'members' => User::where('role', 'member')->where('active', true)->orderBy('name')->get(),
-            'exercises' => Exercise::where('active', true)->orderBy('name')->get(),
+            'exercises' => Exercise::with('muscleGroup')->where('active', true)->orderBy('muscle_group_id')->orderBy('name')->get(),
+            'templates' => WorkoutTemplate::with(['items.exercise'])->where('active', true)->orderBy('name')->get(),
+            'reusableWorkouts' => Workout::with(['items.exercise', 'member'])->whereHas('items')->latest('starts_at')->limit(100)->get(),
         ]);
     }
 
@@ -37,6 +43,8 @@ class WorkoutController extends Controller
             'starts_at' => ['required', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
             'notes' => ['nullable', 'string', 'max:2000'],
+            'workout_template_id' => ['nullable', 'exists:workout_templates,id'],
+            'source_workout_id' => ['nullable', 'exists:workouts,id'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.exercise_id' => ['required', 'distinct', 'exists:exercises,id'],
             'items.*.sets' => ['required', 'integer', 'min:1', 'max:20'],
@@ -65,7 +73,7 @@ class WorkoutController extends Controller
     public function show(Request $request, Workout $workout)
     {
         abort_unless($request->user()->isStaff() || $workout->member_id === $request->user()->id, 403);
-        $workout->load(['member', 'author', 'items.exercise']);
+        $workout->load(['member', 'author', 'items.exercise.media', 'items.exercise.muscleGroup']);
 
         return view('workouts.show', compact('workout'));
     }

@@ -22,15 +22,15 @@ class MembershipController extends Controller
             })
             ->latest()->paginate(15)->withQueryString();
 
-        return view('memberships.index', compact('memberships'));
+        $members = User::where('role', 'member')->where('active', true)->orderBy('name')->get();
+        $plans = Plan::where('active', true)->orderBy('name')->get();
+
+        return view('memberships.index', compact('memberships', 'members', 'plans'));
     }
 
     public function create()
     {
-        return view('memberships.create', [
-            'members' => User::where('role', 'member')->where('active', true)->orderBy('name')->get(),
-            'plans' => Plan::where('active', true)->orderBy('name')->get(),
-        ]);
+        return redirect()->route('memberships.index', ['modal' => 'create']);
     }
 
     public function store(Request $request, BillingService $billing)
