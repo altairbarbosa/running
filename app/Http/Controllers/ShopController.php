@@ -31,5 +31,23 @@ class ShopController extends Controller
         DB::transaction(function()use($request,$product,$data){$product=Product::lockForUpdate()->findOrFail($product->id); abort_unless($product->active&&$product->stock >= $data['quantity'],422,'Estoque insuficiente.'); $subtotal=(float)$product->price*$data['quantity']; $order=Order::create(['member_id'=>$request->user()->id,'status'=>'pending','total'=>$subtotal,'ordered_at'=>now()]); $order->items()->create(['product_id'=>$product->id,'product_name'=>$product->name,'unit_price'=>$product->price,'quantity'=>$data['quantity'],'subtotal'=>$subtotal]); $product->decrement('stock',$data['quantity']);});
         return back()->with('success','Pedido realizado. A academia fará a confirmação.');
     }
-    private function productData(Request $request): array { return $request->validate(['name'=>['required','string','max:120'],'description'=>['nullable','string','max:1000'],'price'=>['required','numeric','min:0.01'],'stock'=>['required','integer','min:0'],'active'=>['required','boolean'],'image'=>['nullable',File::image()->max(3*1024)]]); }
+    private function productData(Request $request): array
+    {
+        return $request->validate(
+            [
+                'name'=>['required','string','max:120'],
+                'description'=>['nullable','string','max:1000'],
+                'price'=>['required','numeric','min:0.01'],
+                'stock'=>['required','integer','min:0'],
+                'active'=>['required','boolean'],
+                'image'=>['nullable',File::image()->max(3*1024)],
+            ],
+            [
+                'image.uploaded'=>'Não foi possível enviar a imagem. Use um arquivo de até 3 MB.',
+                'image.image'=>'A imagem deve ser um arquivo JPG, PNG, GIF, BMP ou WebP.',
+                'image.max'=>'A imagem deve ter no máximo 3 MB.',
+            ],
+            ['image'=>'imagem'],
+        );
+    }
 }
