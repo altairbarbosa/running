@@ -5,8 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
-class ProfilePasswordController extends Controller
+class ForcedPasswordController extends Controller
 {
+    public function edit(Request $request)
+    {
+        if (! $request->user()->must_change_password) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.change-temporary-password');
+    }
+
     public function update(Request $request)
     {
         $data = $request->validate([
@@ -20,6 +29,8 @@ class ProfilePasswordController extends Controller
             'password_changed_at' => now(),
         ]);
 
-        return back()->with('success', 'Senha alterada com sucesso.');
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard')->with('success', 'Senha definitiva criada com sucesso.');
     }
 }

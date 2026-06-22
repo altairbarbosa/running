@@ -13,10 +13,10 @@
         <p class="text-sm font-bold text-brand-600">BEM-VINDO DE VOLTA</p><h2 class="mt-2 text-3xl font-black text-ink-950">Acesse sua conta</h2><p class="mt-2 text-slate-500">Use suas credenciais para continuar.</p>
         <form method="POST" action="{{ route('login.store') }}" class="mt-8 space-y-5">@csrf
             <div><label class="label" for="email">E-mail</label><input class="field" id="email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email">@error('email')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror</div>
-            <div><label class="label" for="password">Senha</label><input class="field" id="password" name="password" type="password" required autocomplete="current-password"></div>
+            <div><div class="flex items-center justify-between"><label class="label" for="password">Senha</label><a href="{{ route('password.request') }}" class="text-xs font-bold text-brand-700 hover:underline">Esqueci minha senha</a></div><input class="field" id="password" name="password" type="password" required autocomplete="current-password"></div>
             <label class="flex items-center gap-2 text-sm text-slate-600"><input type="checkbox" name="remember" value="1"> Lembrar de mim</label>
             <button class="btn-primary w-full" type="submit">Entrar</button>
         </form>
-        <div class="mt-6 rounded-xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-500">Ambiente inicial: <strong>admin@running.test</strong> / <strong>password</strong></div>
+        @if(session('status'))<div class="mt-6 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-700">{{ session('status') }}</div>@endif
     </div></section>
 </main></body></html>

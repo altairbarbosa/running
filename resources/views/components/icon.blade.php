@@ -14,6 +14,7 @@
     'logout' => '<path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>',
     'menu' => '<path d="M4 6h16M4 12h16M4 18h16"/>',
     'close' => '<path d="m6 6 12 12M18 6 6 18"/>',
+    'chevron-down' => '<path d="m6 9 6 6 6-6"/>',
     'plus' => '<path d="M12 5v14M5 12h14"/>',
     'search' => '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
     'arrow-right' => '<path d="M5 12h14M13 6l6 6-6 6"/>',

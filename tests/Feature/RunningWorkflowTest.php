@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Exercise;
 use App\Models\MuscleGroup;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Membership;
 use App\Models\User;
@@ -178,6 +179,59 @@ class RunningWorkflowTest extends TestCase
         $this->get(route('plans.edit', $plan))->assertRedirect(route('plans.index', ['modal' => 'edit', 'plan' => $plan->id]));
         $this->get(route('memberships.create'))->assertRedirect(route('memberships.index', ['modal' => 'create']));
         $this->get(route('users.edit', $admin))->assertRedirect(route('users.index', ['modal' => 'edit', 'user' => $admin->id]));
+    }
+
+    public function test_member_modal_shows_billing_and_purchase_overviews(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $member = User::factory()->create(['role' => 'member']);
+        $plan = \App\Models\Plan::create([
+            'name' => 'Plano da visão rápida', 'price' => 120, 'enrollment_fee' => 0,
+            'billing_interval_months' => 1, 'active' => true,
+        ]);
+        $membership = Membership::create([
+            'member_id' => $member->id, 'plan_id' => $plan->id, 'starts_at' => today(),
+            'status' => 'active', 'billing_day' => 10, 'price' => 120,
+        ]);
+        $membership->charges()->create([
+            'type' => 'monthly', 'description' => 'Mensalidade rápida',
+            'due_date' => today()->addDays(5), 'amount' => 120, 'status' => 'pending',
+        ]);
+        $product = Product::create(['name' => 'Camiseta histórica', 'price' => 60, 'stock' => 5, 'active' => true]);
+        $order = Order::create(['member_id' => $member->id, 'status' => 'pending', 'total' => 60, 'ordered_at' => now()]);
+        $order->items()->create(['product_id' => $product->id, 'product_name' => $product->name, 'unit_price' => 60, 'quantity' => 1, 'subtotal' => 60]);
+
+        $this->actingAs($admin)->get(route('members.index', ['modal' => 'edit', 'member' => $member->id]))
+            ->assertOk()
+            ->assertSee('Mensalidades')
+            ->assertSee('Compras')
+            ->assertSee('Mensalidade rápida')
+            ->assertSee('Camiseta histórica');
+    }
+
+    public function test_member_list_is_paginated_and_rows_are_interactive(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        foreach (range(1, 14) as $number) {
+            User::factory()->create([
+                'role' => 'member',
+                'name' => sprintf('Aluno %02d', $number),
+                'email' => sprintf('aluno%02d@example.test', $number),
+            ]);
+        }
+
+        $this->actingAs($admin)->get(route('members.index'))
+            ->assertOk()
+            ->assertSee('Mostrando')
+            ->assertSee('de <strong class="text-ink-950">14</strong> alunos', false)
+            ->assertSee('role="button"', false)
+            ->assertSee('Aluno 12')
+            ->assertDontSee('Aluno 13');
+
+        $this->get(route('members.index', ['page' => 2]))
+            ->assertOk()
+            ->assertSee('Aluno 13')
+            ->assertSee('Aluno 14');
     }
 
     public function test_member_can_view_own_billing_and_order_shop_products(): void
