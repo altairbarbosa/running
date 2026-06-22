@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'phone', 'birth_date', 'address', 'avatar_path', 'active'])]
+#[Fillable(['name', 'email', 'password', 'role', 'permission_group_id', 'phone', 'birth_date', 'address', 'avatar_path', 'active', 'must_change_password', 'password_changed_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,6 +29,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'birth_date' => 'date',
             'active' => 'boolean',
+            'must_change_password' => 'boolean',
+            'password_changed_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -52,9 +55,42 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'member_id');
     }
 
+    public function permissionGroup()
+    {
+        return $this->belongsTo(PermissionGroup::class);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        $permissions = $this->permissionGroup
+            ? $this->permissionGroup->permissions->pluck('permission')->all()
+            : config('permissions.defaults.'.$this->role, []);
+
+        if (in_array('*', $permissions, true) || in_array($permission, $permissions, true)) {
+            return true;
+        }
+
+        $impliedBy = [
+            'members.view' => 'members.manage',
+            'workouts.view' => 'workouts.manage',
+            'shop.view' => 'shop.manage',
+        ];
+
+        return isset($impliedBy[$permission]) && in_array($impliedBy[$permission], $permissions, true);
+    }
+
     public function isStaff(): bool
     {
         return in_array($this->role, ['admin', 'trainer'], true);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     public function isAdmin(): bool

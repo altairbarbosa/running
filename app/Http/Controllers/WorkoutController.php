@@ -16,12 +16,12 @@ class WorkoutController extends Controller
     {
         $user = $request->user();
         $workouts = Workout::with(['member', 'items'])
-            ->when(! $user->isStaff(), fn ($query) => $query->where('member_id', $user->id))
-            ->when($user->isStaff() && $request->integer('member_id'), fn ($query) => $query->where('member_id', $request->integer('member_id')))
+            ->when(! $user->hasPermission('workouts.manage'), fn ($query) => $query->where('member_id', $user->id))
+            ->when($user->hasPermission('workouts.manage') && $request->integer('member_id'), fn ($query) => $query->where('member_id', $request->integer('member_id')))
             ->latest('starts_at')->paginate(12);
 
-        $members = $user->isStaff() ? User::where('role', 'member')->where('active', true)->orderBy('name')->get() : collect();
-        $templates = $user->isStaff() ? WorkoutTemplate::with(['items.exercise', 'author'])->where('active', true)->orderBy('name')->get() : collect();
+        $members = $user->hasPermission('workouts.manage') ? User::where('role', 'member')->where('active', true)->orderBy('name')->get() : collect();
+        $templates = $user->hasPermission('workouts.manage') ? WorkoutTemplate::with(['items.exercise', 'author'])->where('active', true)->orderBy('name')->get() : collect();
         return view('workouts.index', compact('workouts', 'members', 'templates'));
     }
 
@@ -72,7 +72,7 @@ class WorkoutController extends Controller
 
     public function show(Request $request, Workout $workout)
     {
-        abort_unless($request->user()->isStaff() || $workout->member_id === $request->user()->id, 403);
+        abort_unless($request->user()->hasPermission('workouts.manage') || $workout->member_id === $request->user()->id, 403);
         $workout->load(['member', 'author', 'items.exercise.media', 'items.exercise.muscleGroup']);
 
         return view('workouts.show', compact('workout'));

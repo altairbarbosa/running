@@ -11,8 +11,8 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
-        $products=Product::when(!$request->user()->isStaff(),fn($q)=>$q->where('active',true)->where('stock','>',0))->orderBy('name')->get();
-        $orders=$request->user()->isStaff()?Order::with(['member','items'])->latest('ordered_at')->limit(20)->get():Order::with('items')->where('member_id',$request->user()->id)->latest('ordered_at')->get();
+        $products=Product::when(!$request->user()->hasPermission('shop.manage'),fn($q)=>$q->where('active',true)->where('stock','>',0))->orderBy('name')->get();
+        $orders=$request->user()->hasPermission('shop.manage')?Order::with(['member','items'])->latest('ordered_at')->limit(20)->get():Order::with('items')->where('member_id',$request->user()->id)->latest('ordered_at')->get();
         return view('shop.index',compact('products','orders'));
     }
     public function storeProduct(Request $request)

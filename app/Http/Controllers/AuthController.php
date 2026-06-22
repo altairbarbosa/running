@@ -25,7 +25,28 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        if ($request->user()->must_change_password) {
+            return redirect()->route('password.change.edit');
+        }
+
+        $destinations = [
+            'dashboard.view' => 'dashboard',
+            'workouts.view' => 'workouts.index',
+            'shop.view' => 'shop.index',
+            'members.view' => 'members.index',
+            'billing.view-own' => 'portal.billing',
+            'users.manage' => 'users.index',
+            'permissions.manage' => 'permissions.index',
+        ];
+        foreach ($destinations as $permission => $route) {
+            if ($request->user()->hasPermission($permission)) {
+                return redirect()->intended(route($route));
+            }
+        }
+
+        Auth::logout();
+
+        return back()->withErrors(['email' => 'Sua conta não possui nenhum acesso habilitado.']);
     }
 
     public function destroy(Request $request)

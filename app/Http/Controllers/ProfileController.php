@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AvatarService;
+use App\Rules\PhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -20,7 +21,7 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:190', Rule::unique('users')->ignore($user)],
-            'phone' => ['nullable', 'string', 'max:30'],
+            'phone' => ['nullable', 'string', 'max:30', new PhoneNumber],
             'birth_date' => ['nullable', 'date', 'before:today'],
             'address' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', File::image()->max(2 * 1024)],
