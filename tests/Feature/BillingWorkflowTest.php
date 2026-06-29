@@ -77,6 +77,38 @@ class BillingWorkflowTest extends TestCase
         $this->assertSame('0.00', $charge->fresh()->paid_amount);
     }
 
+    public function test_member_can_view_their_own_billing(): void
+    {
+        [, $charge] = $this->chargeFixture();
+        $member = $charge->membership->member;
+
+        $this->actingAs($member)
+            ->get(route('portal.billing'))
+            ->assertOk()
+            ->assertSee('Total pendente')
+            ->assertSee('Mensalidade');
+    }
+
+    public function test_admin_is_redirected_from_personal_billing_to_finance(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->get(route('portal.billing'))
+            ->assertRedirect(route('finance.index'));
+    }
+
+    public function test_admin_navigation_does_not_show_personal_billing_link(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertDontSee(route('portal.billing'), false)
+            ->assertSee(route('finance.index'), false);
+    }
+
     private function chargeFixture(): array
     {
         $admin = User::factory()->create(['role' => 'admin']);

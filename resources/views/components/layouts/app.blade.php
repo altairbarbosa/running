@@ -25,7 +25,7 @@
             @can('workouts.view')<a href="{{ route('workouts.index') }}" class="nav-link {{ request()->routeIs('workouts.*') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="workout" />Treinos</a>@endcan
             @can('shop.view')<a href="{{ route('shop.index') }}" class="nav-link {{ request()->routeIs('shop.*') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="shop" />Loja</a>@endcan
             @canany(['billing.view-own','plans.manage','memberships.manage','billing.manage'])<p class="px-3.5 pb-1 pt-5 text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">Financeiro</p>@endcanany
-            @can('billing.view-own')<a href="{{ route('portal.billing') }}" class="nav-link {{ request()->routeIs('portal.billing') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="receipt" />Mensalidades</a>@endcan
+            @if(auth()->user()->role === 'member')@can('billing.view-own')<a href="{{ route('portal.billing') }}" class="nav-link {{ request()->routeIs('portal.billing') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="receipt" />Mensalidades</a>@endcan @endif
             @can('plans.manage')<a href="{{ route('plans.index') }}" class="nav-link {{ request()->routeIs('plans.*') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="plans" />Planos</a>@endcan
             @can('memberships.manage')<a href="{{ route('memberships.index') }}" class="nav-link {{ request()->routeIs('memberships.*') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="membership" />Matrículas</a>@endcan
             @can('billing.manage')<a href="{{ route('finance.index') }}" class="nav-link {{ request()->routeIs('finance.*') ? 'nav-link-active' : 'nav-link-idle' }}"><x-icon name="finance" />Cobranças</a>@endcan
