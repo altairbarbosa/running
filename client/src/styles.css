@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #f0fdf9;
+  --color-brand-100: #ccfbef;
+  --color-brand-500: #14b890;
+  --color-brand-600: #079473;
+  --color-brand-700: #08765e;
+  --color-ink-950: #101a1e;
+}
+
+@layer base {
+  body { @apply bg-slate-50 text-slate-800 antialiased dark:bg-neutral-950 dark:text-neutral-200; }
+  input, select, textarea { @apply outline-none; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer components {
+  .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-700 focus:ring-4 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:border-neutral-600 dark:hover:bg-neutral-800; }
+  .btn-danger { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60; }
+  .field { @apply min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-base text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100 sm:text-sm dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:ring-brand-500/20; }
+  .label { @apply mb-1.5 block text-sm font-semibold text-slate-700 dark:text-neutral-200; }
+  .card { @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,.04),0_8px_24px_rgba(15,23,42,.03)] dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none; }
+  .nav-link { @apply flex min-h-11 items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition; }
+  .nav-link-active { @apply bg-brand-500 text-ink-950 shadow-sm; }
+  .nav-link-idle { @apply text-slate-400 hover:bg-white/5 hover:text-white; }
+  .page-shell { @apply mx-auto w-full max-w-[1480px]; }
+}

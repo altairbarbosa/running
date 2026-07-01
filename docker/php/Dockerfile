@@ -14,9 +14,13 @@ COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 WORKDIR /var/www/html
 
-COPY --chown=www-data:www-data . .
+COPY --chown=www-data:www-data server/composer.json server/composer.lock ./
 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+COPY --chown=www-data:www-data server/ .
+
+RUN composer dump-autoload --optimize \
     && chown -R www-data:www-data storage bootstrap/cache
 
 USER www-data

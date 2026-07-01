@@ -1,22 +1,39 @@
 # Running
 
-Reescrita moderna do sistema acadêmico de gestão de academias, com o projeto original preservado em `./vanilla`.
+Monorepo do sistema de gestão de academia Running, separado em API Laravel e SPA React.
 
 ## Stack
 
-- Laravel 13 / PHP 8.4
-- Blade, Alpine.js, Tailwind CSS e Vite
-- MySQL 8.4
-- Nginx, Mailpit e Docker Compose
+- Backend: Laravel 13 / PHP 8.4 em `server/`
+- Frontend: React + Vite + Tailwind CSS em `client/`
+- Autenticação: Laravel Sanctum com cookies de SPA
+- Banco: MySQL 8.4
+- Infra: Docker Compose, Nginx e Mailpit
+
+## Estrutura
+
+```text
+running/
+├── client/              # SPA React
+├── server/              # API Laravel
+├── docker/              # Dockerfiles e Nginx
+└── docker-compose.yml   # Orquestração local
+```
 
 ## Executar
 
 ```bash
 docker compose up -d --build
-docker compose exec app php artisan migrate --seed
+docker compose exec api composer install
+docker compose exec api php artisan key:generate
+docker compose exec api php artisan migrate --seed
 ```
 
-A aplicação estará em <http://localhost:8080> e o Mailpit em <http://localhost:8026>.
+Acesse:
+
+- Frontend: <http://localhost:5174>
+- Backend/API: <http://localhost:8080/api>
+- Mailpit: <http://localhost:8026>
 
 Credenciais de demonstração:
 
@@ -26,30 +43,11 @@ Credenciais de demonstração:
 ## Comandos úteis
 
 ```bash
-docker compose exec app php artisan test
-docker compose exec app php artisan migrate:fresh --seed
-docker compose exec app ./vendor/bin/pint
-docker compose exec node npm run build
+docker compose exec api php artisan test
+docker compose exec api php artisan migrate:fresh --seed
+docker compose exec api ./vendor/bin/pint
+docker compose exec front npm run build
+docker compose exec api php artisan billing:generate
 ```
 
-## Escopo atual
-
-- autenticação e autorização por perfil;
-- cadastro de alunos;
-- catálogo de exercícios;
-- elaboração e consulta de fichas de treino;
-- planos e matrículas com preço histórico;
-- geração automática e idempotente de cobranças;
-- pagamentos parciais e totais;
-- controle de vencimentos e inadimplência;
-- perfil pessoal com foto e alteração segura de senha;
-- gestão administrativa de usuários, papéis e acessos;
-- interface responsiva para administração e aluno.
-
-Para gerar cobranças manualmente:
-
-```bash
-docker compose exec app php artisan billing:generate
-```
-
-O serviço `scheduler` executa essa atualização automaticamente todos os dias. A migração dos dados financeiros legados será implementada em uma etapa própria.
+O serviço `scheduler` executa a geração de cobranças automaticamente todos os dias.
