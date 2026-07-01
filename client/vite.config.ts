@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     host: true,
+    allowedHosts: ['e-cube'],
     port: 5174,
     proxy: {
       '/api': {
